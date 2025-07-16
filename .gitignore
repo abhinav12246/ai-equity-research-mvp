@@ -17,3 +17,7 @@ venv/
 
 # Ignore macOS system file
 .DS_Store
+
+# Ignore cache and data
+.cache/
+reports.json
