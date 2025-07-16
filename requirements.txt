@@ -11,3 +11,4 @@ torch
 whisper
 yt_dlp
 googlesearch-python==1.2.3
+requests
