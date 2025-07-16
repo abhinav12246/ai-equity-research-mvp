@@ -57,10 +57,28 @@ if st.button("🔍 Analyze") and ticker:
                 response = requests.get(first_report_url)
                 if response.status_code == 200:
                     pdf_bytes = BytesIO(response.content)
-                    report_text = parse_pdf_report(pdf_bytes)
+                    from utils.storage import load_from_cache, save_to_cache, append_to_db
                     from utils.llm_report_extractor import extract_insights_from_report
-                    insights = extract_insights_from_report(report_text)
                     
+                    report_text = parse_pdf_report(pdf_bytes)
+                    
+                    # Check cache
+                    cached = load_from_cache(ticker, report_text)
+                    if cached:
+                        insights = cached
+                        st.info("✅ Loaded from cache")
+                    else:
+                        insights = extract_insights_from_report(report_text)
+                        save_to_cache(ticker, report_text, insights)
+                        append_to_db({
+                            "ticker": ticker,
+                            "brokerage": insights.get("brokerage"),
+                            "rating": insights.get("rating"),
+                            "target_price": insights.get("target_price"),
+                            "thesis": insights.get("thesis"),
+                            "risks": insights.get("risks"),
+                        })
+
                     st.subheader("🧠 Analyst Insights")
                     if "error" in insights:
                         st.error(insights["error"])
