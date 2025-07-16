@@ -1,5 +1,7 @@
 streamlit
 langchain
+langchain>=0.1.0
+langchain-openai>=0.1.0
 openai
 chromadb
 PyMuPDF
