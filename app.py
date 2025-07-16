@@ -1,7 +1,7 @@
 import streamlit as st
 from chains.stock_summary_chain import run_summary_chain
 from chains.sentiment_chain import analyze_sentiment
-from utils.extract_financials import parse_pdf_report
+from utils.advanced_pdf_parser import parse_pdf_report_advanced as parse_pdf_report
 from utils.get_stock_data import fetch_key_ratios
 from utils.find_analyst_reports import find_analyst_reports
 
@@ -25,6 +25,23 @@ if st.button("🔍 Analyze") and ticker:
     # -----------------------------
     if uploaded_file:
         report_text = parse_pdf_report(uploaded_file)
+        insights = extract_insights_from_report(report_text)
+        
+        st.subheader("🧠 Analyst Insights")
+        if "error" in insights:
+            st.error(insights["error"])
+        else:
+            st.markdown(f"**🏦 Brokerage:** {insights['brokerage']}")
+            st.markdown(f"**📌 Rating:** {insights['rating']}")
+            st.markdown(f"**🎯 Target Price:** ₹{insights['target_price']}")
+        
+            st.markdown("**💡 Thesis**")
+            for point in insights["thesis"]:
+                st.markdown(f"- {point}")
+        
+            st.markdown("**⚠️ Risks**")
+            for point in insights["risks"]:
+                st.markdown(f"- {point}")
 
     # -----------------------------
     # 🌐 2. If no upload, fetch from internet
@@ -41,6 +58,24 @@ if st.button("🔍 Analyze") and ticker:
                 if response.status_code == 200:
                     pdf_bytes = BytesIO(response.content)
                     report_text = parse_pdf_report(pdf_bytes)
+                    from utils.llm_report_extractor import extract_insights_from_report
+                    insights = extract_insights_from_report(report_text)
+                    
+                    st.subheader("🧠 Analyst Insights")
+                    if "error" in insights:
+                        st.error(insights["error"])
+                    else:
+                        st.markdown(f"**🏦 Brokerage:** {insights['brokerage']}")
+                        st.markdown(f"**📌 Rating:** {insights['rating']}")
+                        st.markdown(f"**🎯 Target Price:** ₹{insights['target_price']}")
+                    
+                        st.markdown("**💡 Thesis**")
+                        for point in insights["thesis"]:
+                            st.markdown(f"- {point}")
+                    
+                        st.markdown("**⚠️ Risks**")
+                        for point in insights["risks"]:
+                            st.markdown(f"- {point}")
                 else:
                     st.error("Failed to fetch the analyst report from the web.")
             except Exception as e:
