@@ -1,15 +1,22 @@
+# Core app
 streamlit
-langchain
-langchain>=0.1.0
-langchain-openai>=0.1.0
 openai
-chromadb
-PyMuPDF
+requests
+googlesearch-python==1.2.3
+
+# LangChain + LLMs
+langchain==0.1.14
+langchain-openai==0.0.5
+
+# Finance + PDF
 yfinance
+PyMuPDF==1.23.1
+
+# Vector DB
+chromadb==0.4.22
+
+# Optional: Sentiment / YouTube (safe to keep)
 transformers
 torch
 whisper
 yt_dlp
-googlesearch-python==1.2.3
-requests
-PyMuPDF==1.23.1
