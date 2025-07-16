@@ -1,0 +1,19 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore logs and audio downloads
+*.log
+*.webm
+temp_audio.*
+
+# Ignore environment variable files
+.env
+.env.*
+
+# Ignore virtual environments and IDE settings
+venv/
+.idea/
+
+# Ignore macOS system file
+.DS_Store

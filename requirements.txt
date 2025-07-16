@@ -1,0 +1,10 @@
+streamlit
+langchain
+openai
+chromadb
+PyMuPDF
+yfinance
+transformers
+torch
+whisper
+yt_dlp
