@@ -4,6 +4,7 @@ from chains.sentiment_chain import analyze_sentiment
 from utils.advanced_pdf_parser import parse_pdf_report_advanced as parse_pdf_report
 from utils.get_stock_data import fetch_key_ratios
 from utils.find_analyst_reports import find_analyst_reports
+from utils.llm_report_extractor import extract_insights_from_report
 
 import requests
 from io import BytesIO
