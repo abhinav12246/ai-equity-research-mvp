@@ -1,5 +1,6 @@
 from langchain.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
+from openai import RateLimitError  # Add this at the top if not already imported
 
 llm = ChatOpenAI(temperature=0.3)
 
@@ -19,9 +20,26 @@ def extract_section(text, keyword):
 
 def run_summary_chain(ticker, sentiment, metrics):
     prompt = template.format(ticker=ticker, sentiment=sentiment, metrics=metrics)
-    response = llm.predict(prompt)
-    return {
-        "recommendation": extract_section(response, "Recommendation"),
-        "target_price": extract_section(response, "Target Price"),
-        "thesis": extract_section(response, "Investment Thesis")
-    }
+    
+    try:
+        response = llm.predict(prompt)
+        return {
+            "recommendation": extract_section(response, "Recommendation"),
+            "target_price": extract_section(response, "Target Price"),
+            "thesis": extract_section(response, "Investment Thesis")
+        }
+    
+    except RateLimitError:
+        return {
+            "recommendation": "⚠️ OpenAI API rate limit hit. Please wait and try again.",
+            "target_price": "-",
+            "thesis": "-"
+        }
+
+    except Exception as e:
+        return {
+            "recommendation": f"❌ Unexpected error: {str(e)}",
+            "target_price": "-",
+            "thesis": "-"
+        }
+
