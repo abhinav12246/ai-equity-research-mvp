@@ -3,7 +3,7 @@ langchain==0.1.14
 langchain-openai==0.0.5
 openai
 chromadb
-PyMuPDF==1.22.5         # ✅ Use compatible older version
+pdfplumber==0.10.2
 yfinance
 transformers
 torch
